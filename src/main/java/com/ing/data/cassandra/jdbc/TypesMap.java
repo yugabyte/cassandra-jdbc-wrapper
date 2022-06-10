@@ -72,6 +72,7 @@ public final class TypesMap {
         TYPES_MAP.put("org.apache.cassandra.db.marshal.uuid", JdbcUUID.INSTANCE);
         TYPES_MAP.put("org.apache.cassandra.db.marshal.varchar", JdbcUTF8.INSTANCE);
         TYPES_MAP.put("org.apache.cassandra.db.marshal.varint", JdbcInteger.INSTANCE);
+        TYPES_MAP.put("org.apache.cassandra.db.marshal.jsonb", JdbcUTF8.INSTANCE);
     }
 
     private TypesMap() {
