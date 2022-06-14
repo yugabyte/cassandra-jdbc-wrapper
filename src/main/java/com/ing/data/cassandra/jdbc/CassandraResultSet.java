@@ -1594,7 +1594,7 @@ public class CassandraResultSet extends AbstractResultSet implements CassandraRe
         @Override
         public boolean isSigned(final int column) {
             // TODO: implementation to review
-            return false;
+            return true;
         }
 
         @Override
