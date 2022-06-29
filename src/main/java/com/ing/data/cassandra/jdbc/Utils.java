@@ -185,11 +185,46 @@ public final class Utils {
     protected static final String FORWARD_ONLY = "Can not position cursor with a type of TYPE_FORWARD_ONLY.";
     protected static final String MALFORMED_URL = "The string '%s' is not a valid URL.";
     protected static final String SSL_CONFIG_FAILED = "Unable to configure SSL: %s.";
+    protected static boolean hasPort = false;
 
     static final Logger LOG = LoggerFactory.getLogger(Utils.class);
 
     private Utils() {
         // Private constructor to hide the public one.
+    }
+
+    public static boolean isIPv6(String hosts_str) {
+        String ipv6Pattern = "([0-9a-f]{1,4}:){7}([0-9a-f]){1,4}";
+        String ipv6Patternwithport = "([0-9a-f]{1,4}:){8}([0-9a-f]){1,4}";
+        Pattern VALID_IPV6_PATTERN = Pattern.compile("([0-9a-f]{1,4}:){7}([0-9a-f]){1,4}", 2);
+        Pattern VALID_IPV6_WITH_PORT_PATTERN = Pattern.compile("([0-9a-f]{1,4}:){8}([0-9a-f]){1,4}", 2);
+        String[] hosts = hosts_str.split("--");
+        int n = hosts.length;
+        boolean value = false;
+
+        Matcher m2;
+        for(int i = 0; i < n - 1; ++i) {
+            m2 = VALID_IPV6_PATTERN.matcher(hosts[i]);
+            value = m2.matches();
+            if (!value) {
+                break;
+            }
+        }
+
+        m2 = VALID_IPV6_WITH_PORT_PATTERN.matcher(hosts[n - 1]);
+        Matcher m3;
+        boolean value2;
+        if (m2.matches()) {
+            hasPort = true;
+            m3 = VALID_IPV6_PATTERN.matcher(hosts[n - 1].substring(0, hosts[n - 1].lastIndexOf(":")));
+            value2 = m3.matches();
+        } else {
+            hasPort = false;
+            m3 = VALID_IPV6_PATTERN.matcher(hosts[n - 1]);
+            value2 = m3.matches();
+        }
+
+        return value && value2;
     }
 
     /**
@@ -212,6 +247,8 @@ public final class Utils {
         final Properties props = new Properties();
 
         if (url != null) {
+            int port = DEFAULT_PORT;
+            String host;
             props.setProperty(TAG_PORT_NUMBER, String.valueOf(DEFAULT_PORT));
             boolean isDbaasConnection = false;
             int uriStartIndex = PROTOCOL.length();
@@ -228,13 +265,30 @@ public final class Utils {
             }
 
             if (!isDbaasConnection) {
-                final String host = uri.getHost();
+                host = uri.getHost();
+                String[] hosts_str = rawUri.split("/");
                 if (host == null) {
-                    throw new SQLNonTransientConnectionException(HOST_IN_URL);
+                    if (!hosts_str[2].contains("--")) {
+                        throw new SQLNonTransientConnectionException("Connection url must specify a host, e.g. jdbc:cassandra://localhost:9042/keyspace");
+                    }
+
+                    boolean Ipv6 = isIPv6(hosts_str[2]);
+                    if (!Ipv6) {
+                        if (hosts_str[2].contains(":")) {
+                            host = hosts_str[2].substring(0, hosts_str[2].indexOf(58));
+                            port = Integer.parseInt(hosts_str[2].substring(hosts_str[2].indexOf(58) + 1));
+                        } else {
+                            host = hosts_str[2];
+                        }
+                    } else if (hasPort) {
+                        host = hosts_str[2].substring(0, hosts_str[2].lastIndexOf(58));
+                        port = Integer.parseInt(hosts_str[2].substring(hosts_str[2].lastIndexOf(58) + 1));
+                    } else {
+                        host = hosts_str[2];
+                    }
                 }
                 props.setProperty(TAG_SERVER_NAME, host);
 
-                int port = DEFAULT_PORT;
                 if (uri.getPort() >= 0) {
                     port = uri.getPort();
                 }
@@ -333,7 +387,10 @@ public final class Utils {
             keyspace = StringUtils.prependIfMissing(keyspace, "/");
         }
 
-        final String host = props.getProperty(TAG_SERVER_NAME);
+        String host = props.getProperty(TAG_SERVER_NAME);
+        if (host.contains("--")) {
+            host = host.split("--")[0];
+        }
         if (host == null) {
             throw new SQLNonTransientConnectionException(HOST_REQUIRED);
         }
