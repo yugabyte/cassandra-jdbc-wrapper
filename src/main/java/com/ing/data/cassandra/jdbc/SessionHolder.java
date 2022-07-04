@@ -234,7 +234,9 @@ class SessionHolder {
         }
 
         // The DefaultLoadBalancingPolicy requires to specify a local data center.
-        builder.withLocalDatacenter(localDatacenter);
+        if (!localDatacenter.trim().isEmpty()) {
+            builder.withLocalDatacenter(localDatacenter);
+        }
         if (loadBalancingPolicy.length() > 0) {
             // if a custom load balancing policy has been given in the JDBC URL, parse it and add it to the cluster
             // builder.
