@@ -193,34 +193,32 @@ public final class Utils {
         // Private constructor to hide the public one.
     }
 
-    public static boolean isIPv6(String hosts_str) {
-        String ipv6Pattern = "([0-9a-f]{1,4}:){7}([0-9a-f]){1,4}";
-        String ipv6Patternwithport = "([0-9a-f]{1,4}:){8}([0-9a-f]){1,4}";
-        Pattern VALID_IPV6_PATTERN = Pattern.compile("([0-9a-f]{1,4}:){7}([0-9a-f]){1,4}", 2);
-        Pattern VALID_IPV6_WITH_PORT_PATTERN = Pattern.compile("([0-9a-f]{1,4}:){8}([0-9a-f]){1,4}", 2);
-        String[] hosts = hosts_str.split("--");
+    public static boolean isIPv6(String hostsStr) {
+        Pattern validIpv6Pattern = Pattern.compile("([0-9a-f]{1,4}:){7}([0-9a-f]){1,4}", 2);
+        Pattern validIpv6WithPortPattern = Pattern.compile("([0-9a-f]{1,4}:){8}([0-9a-f]){1,4}", 2);
+        String[] hosts = hostsStr.split("--");
         int n = hosts.length;
         boolean value = false;
 
         Matcher m2;
-        for(int i = 0; i < n - 1; ++i) {
-            m2 = VALID_IPV6_PATTERN.matcher(hosts[i]);
+        for (int i = 0; i < n - 1; ++i) {
+            m2 = validIpv6Pattern.matcher(hosts[i]);
             value = m2.matches();
             if (!value) {
                 break;
             }
         }
 
-        m2 = VALID_IPV6_WITH_PORT_PATTERN.matcher(hosts[n - 1]);
+        m2 = validIpv6WithPortPattern.matcher(hosts[n - 1]);
         Matcher m3;
         boolean value2;
         if (m2.matches()) {
             hasPort = true;
-            m3 = VALID_IPV6_PATTERN.matcher(hosts[n - 1].substring(0, hosts[n - 1].lastIndexOf(":")));
+            m3 = validIpv6Pattern.matcher(hosts[n - 1].substring(0, hosts[n - 1].lastIndexOf(":")));
             value2 = m3.matches();
         } else {
             hasPort = false;
-            m3 = VALID_IPV6_PATTERN.matcher(hosts[n - 1]);
+            m3 = validIpv6Pattern.matcher(hosts[n - 1]);
             value2 = m3.matches();
         }
 
@@ -266,25 +264,25 @@ public final class Utils {
 
             if (!isDbaasConnection) {
                 host = uri.getHost();
-                String[] hosts_str = rawUri.split("/");
+                String[] hostsStr = rawUri.split("/");
                 if (host == null) {
-                    if (!hosts_str[2].contains("--")) {
+                    if (!hostsStr[2].contains("--")) {
                         throw new SQLNonTransientConnectionException("Connection url must specify a host, e.g. jdbc:cassandra://localhost:9042/keyspace");
                     }
 
-                    boolean Ipv6 = isIPv6(hosts_str[2]);
-                    if (!Ipv6) {
-                        if (hosts_str[2].contains(":")) {
-                            host = hosts_str[2].substring(0, hosts_str[2].indexOf(58));
-                            port = Integer.parseInt(hosts_str[2].substring(hosts_str[2].indexOf(58) + 1));
+                    boolean ipv6 = isIPv6(hostsStr[2]);
+                    if (!ipv6) {
+                        if (hostsStr[2].contains(":")) {
+                            host = hostsStr[2].substring(0, hostsStr[2].indexOf(58));
+                            port = Integer.parseInt(hostsStr[2].substring(hostsStr[2].indexOf(58) + 1));
                         } else {
-                            host = hosts_str[2];
+                            host = hostsStr[2];
                         }
                     } else if (hasPort) {
-                        host = hosts_str[2].substring(0, hosts_str[2].lastIndexOf(58));
-                        port = Integer.parseInt(hosts_str[2].substring(hosts_str[2].lastIndexOf(58) + 1));
+                        host = hostsStr[2].substring(0, hostsStr[2].lastIndexOf(58));
+                        port = Integer.parseInt(hostsStr[2].substring(hostsStr[2].lastIndexOf(58) + 1));
                     } else {
-                        host = hosts_str[2];
+                        host = hostsStr[2];
                     }
                 }
                 props.setProperty(TAG_SERVER_NAME, host);
