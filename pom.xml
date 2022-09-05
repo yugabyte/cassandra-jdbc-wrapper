@@ -3,14 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.ing.data</groupId>
+	<groupId>com.yugabyte</groupId>
 	<artifactId>cassandra-jdbc-wrapper</artifactId>
     <version>4.6.1-yb-1-alpha1</version>
 	<packaging>jar</packaging>
 
-	<name>Cassandra JDBC Wrapper</name>
-	<description>JDBC wrapper of the DataStax Java Driver for Apache Cassandra.</description>
-    <url>https://github.com/ing-bank/cassandra-jdbc-wrapper</url>
+	<name>YugabyteDB YCQL JDBC Wrapper</name>
+	<description>JDBC wrapper of the YugabyteDB Java Driver for YCQL.</description>
+    <url>https://github.com/yugabyte/cassandra-jdbc-wrapper</url>
     <inceptionYear>2020</inceptionYear>
 
 	<licenses>
@@ -22,8 +22,8 @@
 	</licenses>
 
     <organization>
-        <name>ING Bank</name>
-        <url>https://www.ing.com</url>
+        <name>Yugabyte Inc</name>
+        <url>https://www.yugabyte.com</url>
     </organization>
 
 	<developers>
@@ -62,9 +62,9 @@
     </contributors>
 
     <scm>
-        <connection>scm:git:https://github.com:ing-bank/cassandra-jdbc-wrapper.git</connection>
-        <developerConnection>scm:git:git@github.com:ing-bank/cassandra-jdbc-wrapper.git</developerConnection>
-        <url>https://github.com/ing-bank/cassandra-jdbc-wrapper</url>
+        <connection>scm:git:https://github.com:yugabyte/cassandra-jdbc-wrapper.git</connection>
+        <developerConnection>scm:git:git@github.com:yugabyte/cassandra-jdbc-wrapper.git</developerConnection>
+        <url>https://github.com/yugabyte/cassandra-jdbc-wrapper</url>
     </scm>
 
     <distributionManagement>
