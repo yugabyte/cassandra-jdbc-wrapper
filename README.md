@@ -5,8 +5,9 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.ing.data/cassandra-jdbc-wrapper)](https://search.maven.org/search?q=g:com.ing.data%20AND%20cassandra-jdbc-wrapper)
 [![Javadoc](https://javadoc.io/badge2/com.ing.data/cassandra-jdbc-wrapper/javadoc.svg)](https://javadoc.io/doc/com.ing.data/cassandra-jdbc-wrapper)
 
-This is a JDBC wrapper of the DataStax Java Driver for Apache Cassandra (C*), which offers a simple JDBC compliant 
-API to work with CQL3.
+This is a work-in-progress fork of [ing-bank/cassandra-jdbc-wrapper](https://github.com/ing-bank/cassandra-jdbc-wrapper/).
+
+This is a JDBC wrapper of the YugabyteDB Java Driver for YCQL, which offers a simple JDBC compliant API to work with CQL3.
 
 This JDBC wrapper is based on a fork of the project
 [adejanovski/cassandra-jdbc-wrapper](https://github.com/adejanovski/cassandra-jdbc-wrapper/). We would especially like 
@@ -42,7 +43,7 @@ This project requires Java 8 JDK (minimum).
 
 Clone the repository:
 ```bash
-git clone https://github.com/ing-bank/cassandra-jdbc-wrapper.git
+git clone https://github.com/yugabyte/cassandra-jdbc-wrapper.git
 ```
 
 To compile and run tests, execute the following Maven command:
@@ -52,21 +53,14 @@ mvn clean package
     
 ### Integration in Maven projects
 
-You can install it in your application using the following Maven dependency:
+This project has not been published on Maven yet.
 
-```xml
-<dependency>
-    <groupId>com.ing.data</groupId>
-    <artifactId>cassandra-jdbc-wrapper</artifactId>
-    <version>${cassandra-jdbc-wrapper.version}</version>
-</dependency>
-```
 
 ## Usage
 
 Connect to a Cassandra cluster using the following arguments:
 * JDBC driver class: `com.ing.data.cassandra.jdbc.CassandraDriver`
-* JDBC URL: `jdbc:cassandra://host1--host2--host3:9042/keyspace?localdatacenter=DC1` (to connect to a DBaaS cluster, 
+* JDBC URL: `jdbc:cassandra://host1--host2--host3:9042/keyspace?localdatacenter=DC1&loadbalancing=PartitionAwarePolicy` (to connect to a DBaaS cluster,
   please read the section "[Connecting to DBaaS](#connecting-to-dbaas)"; to use a configuration file, please read the 
   section "[Using a configuration file](#using-a-configuration-file)")
 
@@ -85,7 +79,7 @@ Java example:
 public class HelloCassandra {
     public static void main(final String[] args) {
         // Used driver: com.ing.data.cassandra.cassandra.jdbc.CassandraDriver
-        final String url = "jdbc:cassandra://host1--host2--host3:9042/keyspace?localdatacenter=DC1";
+        final String url = "jdbc:cassandra://host1--host2--host3:9042/keyspace?localdatacenter=DC1&loadbalancing=PartitionAwarePolicy";
         final Connection connection = DriverManager.getConnection(url);
     }
 }

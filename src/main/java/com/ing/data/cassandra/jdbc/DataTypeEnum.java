@@ -66,7 +66,8 @@ public enum DataTypeEnum {
     UDT(DataType.UDT, UdtValue.class, "UDT"),
     UUID(DataType.UUID, UUID.class, cqlName(DataTypes.UUID)),
     VARCHAR(DataType.VARCHAR, String.class, "VARCHAR"),
-    VARINT(DataType.VARINT, BigInteger.class, cqlName(DataTypes.VARINT));
+    VARINT(DataType.VARINT, BigInteger.class, cqlName(DataTypes.VARINT)),
+    JSONB(DataType.JSONB, String.class, cqlName(DataTypes.JSONB));
 
     private static final Map<String, DataTypeEnum> CQL_DATATYPE_TO_DATATYPE;
     final int protocolId;

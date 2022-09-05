@@ -374,10 +374,10 @@ public class CassandraConnection extends AbstractConnection implements Connectio
 
     @Override
     public void setTransactionIsolation(final int level) throws SQLException {
-        checkNotClosed();
-        if (level != Connection.TRANSACTION_NONE) {
-            throw new SQLFeatureNotSupportedException(NO_TRANSACTIONS);
-        }
+//        checkNotClosed();
+//        if (level != Connection.TRANSACTION_NONE) {
+//            throw new SQLFeatureNotSupportedException(NO_TRANSACTIONS);
+//        }
     }
 
     @Override

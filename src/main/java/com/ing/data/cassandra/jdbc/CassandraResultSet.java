@@ -819,6 +819,7 @@ public class CassandraResultSet extends AbstractResultSet implements CassandraRe
             switch (dataType) {
                 case VARCHAR:
                 case ASCII:
+                case JSONB:
                 case TEXT:
                     return this.currentRow.getString(columnIndex - 1);
                 case INT:
@@ -950,6 +951,7 @@ public class CassandraResultSet extends AbstractResultSet implements CassandraRe
             switch (dataType) {
                 case VARCHAR:
                 case ASCII:
+                case JSONB:
                 case TEXT:
                     return this.currentRow.getString(columnLabel);
                 case INT:
@@ -1592,7 +1594,7 @@ public class CassandraResultSet extends AbstractResultSet implements CassandraRe
         @Override
         public boolean isSigned(final int column) {
             // TODO: implementation to review
-            return false;
+            return true;
         }
 
         @Override
