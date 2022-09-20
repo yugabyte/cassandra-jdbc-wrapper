@@ -35,6 +35,7 @@ import com.ing.data.cassandra.jdbc.utils.FakeLoadBalancingPolicy;
 import com.ing.data.cassandra.jdbc.utils.FakeReconnectionPolicy;
 import com.ing.data.cassandra.jdbc.utils.FakeRetryPolicy;
 import com.ing.data.cassandra.jdbc.utils.FakeSslEngineFactory;
+import com.yugabyte.oss.driver.internal.core.loadbalancing.PartitionAwarePolicy;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -155,7 +156,7 @@ class ConnectionUnitTest extends UsingEmbeddedCassandraServerTest {
         final LoadBalancingPolicy loadBalancingPolicy = sqlConnection.getSession().getContext()
             .getLoadBalancingPolicy(DriverExecutionProfile.DEFAULT_NAME);
         assertNotNull(loadBalancingPolicy);
-        assertThat(loadBalancingPolicy, instanceOf(DefaultLoadBalancingPolicy.class));
+        assertThat(loadBalancingPolicy, instanceOf(PartitionAwarePolicy.class));
         sqlConnection.close();
     }
 
