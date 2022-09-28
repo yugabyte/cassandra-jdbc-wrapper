@@ -264,9 +264,9 @@ public final class Utils {
 
             if (!isDbaasConnection) {
                 host = uri.getHost();
-                String[] hostsStr = rawUri.split("/");
                 if (host == null) {
-                    if (!hostsStr[2].contains("--")) {
+                    String[] hostsStr = rawUri.split("/");
+                    if (hostsStr.length < 3 || !hostsStr[2].contains("--")) {
                         throw new SQLNonTransientConnectionException("Connection url must specify a host, e.g. jdbc:cassandra://localhost:9042/keyspace");
                     }
 
@@ -386,11 +386,11 @@ public final class Utils {
         }
 
         String host = props.getProperty(TAG_SERVER_NAME);
-        if (host.contains("--")) {
-            host = host.split("--")[0];
-        }
         if (host == null) {
             throw new SQLNonTransientConnectionException(HOST_REQUIRED);
+        }
+        if (host.contains("--")) {
+            host = host.split("--")[0];
         }
 
         // Build a valid URI from parts.
